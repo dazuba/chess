@@ -1,4 +1,3 @@
-#pragma once
 #include "pieces.h"
 
 int Piece::GetColor() {

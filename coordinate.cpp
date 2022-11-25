@@ -19,3 +19,7 @@ Coordinate& Coordinate::operator-=(const Coordinate& other) {
 Coordinate Coordinate::operator+(const Coordinate& other) const {
     return Coordinate(x + other.x, y + other.y);
 }
+
+bool Coordinate::IsValid() const {
+    return x >= 0 && x < 8 && y >= 0 && y < 8;
+}

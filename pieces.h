@@ -3,7 +3,6 @@
 
 class Piece {
 protected:
-    Coordinate crd_;
     int color_;
 
 public:

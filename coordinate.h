@@ -10,4 +10,6 @@ public:
     Coordinate& operator+=(const Coordinate& other);
     Coordinate& operator-=(const Coordinate& other);
     Coordinate operator+(const Coordinate& other) const;
+
+    bool IsValid() const;
 };

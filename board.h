@@ -1,19 +1,16 @@
 #pragma once
 #include "move.h"
 #include "pieces.h"
+#include "movedirs.h"
 #include <vector>
 
 class Board {
 public:
-    int GetPieceColor(const Coordinate& crd);
-
-    // static Board& GetInstance();
+    Piece* GetPiece(const Coordinate& crd) const;
 
 private:
     std::vector<Move> moves;
-    std::vector<std::vector<Piece>> data_;
-    // static std::unique_ptr<Board> instance_;
-    std::vector<Coordinate> ValidMoves(Coordinate crd) const;
+    std::vector<std::vector<Piece*>> data_;
 
-    Board() = default;
+    std::vector<Coordinate> ValidMoves(const Coordinate& crd) const;
 };
