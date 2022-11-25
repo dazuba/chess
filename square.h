@@ -5,9 +5,12 @@ class Square {
 private:
     Piece* piece;
     int attackCnt;
+    
 
 public:
+    int isEnPassant = 0;
+
     bool IsAttacked();
 
-    bool GetColor();
+    bool GetPieceColor();
 };

@@ -1,6 +1,6 @@
 #include "square.h"
 
-bool Square::GetColor() {
+bool Square::GetPieceColor() {
     if (piece == nullptr) {
         return 0;
     }
