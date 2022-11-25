@@ -2,4 +2,5 @@
 
 struct Move {
     Coordinate from, to;
+    
 };

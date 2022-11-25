@@ -10,7 +10,7 @@ Coordinate& Coordinate::operator+=(const Coordinate& other) {
     return *this;
 }
 
-Coordinate& Coordinate::operator+=(const Coordinate& other) {
+Coordinate& Coordinate::operator-=(const Coordinate& other) {
     x -= other.x;
     y -= other.y;
     return *this;
