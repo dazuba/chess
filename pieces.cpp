@@ -1,6 +1,8 @@
 #include "pieces.h"
 
-int Piece::GetColor() {
+Piece::Piece(int color) : color_(color) {};
+
+int Piece::GetColor() const {
     return color_;
 }
 
@@ -20,6 +22,10 @@ MoveDirs King::Dirs() const {
     };
 }
 
+King::King(int color) {
+    color_ = color;
+}
+
 MoveDirs Queen::Dirs() const {
     return MoveDirs {
         {
@@ -36,6 +42,10 @@ MoveDirs Queen::Dirs() const {
     };
 }
 
+Queen::Queen(int color) {
+    color_ = color;
+}
+
 MoveDirs Rook::Dirs() const {
     return MoveDirs {
         {
@@ -48,6 +58,10 @@ MoveDirs Rook::Dirs() const {
     };
 }
 
+Rook::Rook(int color) {
+    color_ = color;
+}
+
 MoveDirs Bishop::Dirs() const {
     return MoveDirs {
         {
@@ -58,6 +72,10 @@ MoveDirs Bishop::Dirs() const {
         }, 
         7
     };
+}
+
+Bishop::Bishop(int color) {
+    color_ = color;
 }
 
 MoveDirs Knight::Dirs() const {
@@ -76,6 +94,14 @@ MoveDirs Knight::Dirs() const {
     };
 }
 
+Knight::Knight(int color) {
+    color_ = color;
+}
+
 MoveDirs Pawn::Dirs() const {
     return MoveDirs { {}, 0 };
+}
+
+Pawn::Pawn(int color) {
+    color_ = color;
 }

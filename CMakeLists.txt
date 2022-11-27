@@ -3,4 +3,4 @@ project(chess)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(chess main.cpp board.cpp pieces.cpp coordinate.cpp)
+add_executable(chess main.cpp game.cpp board.cpp pieces.cpp coordinate.cpp)
