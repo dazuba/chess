@@ -1,8 +1,8 @@
 #include "pieces.h"
 
-Piece::Piece(int color) : color_(color) {};
+Piece::Piece(uint8_t color) : color_(color) {};
 
-int Piece::GetColor() const {
+uint8_t Piece::GetColor() const {
     return color_;
 }
 
@@ -22,7 +22,7 @@ MoveDirs King::Dirs() const {
     };
 }
 
-King::King(int color) {
+King::King(uint8_t color) {
     color_ = color;
 }
 
@@ -42,7 +42,7 @@ MoveDirs Queen::Dirs() const {
     };
 }
 
-Queen::Queen(int color) {
+Queen::Queen(uint8_t color) {
     color_ = color;
 }
 
@@ -58,7 +58,7 @@ MoveDirs Rook::Dirs() const {
     };
 }
 
-Rook::Rook(int color) {
+Rook::Rook(uint8_t color) {
     color_ = color;
 }
 
@@ -74,7 +74,7 @@ MoveDirs Bishop::Dirs() const {
     };
 }
 
-Bishop::Bishop(int color) {
+Bishop::Bishop(uint8_t color) {
     color_ = color;
 }
 
@@ -94,7 +94,7 @@ MoveDirs Knight::Dirs() const {
     };
 }
 
-Knight::Knight(int color) {
+Knight::Knight(uint8_t color) {
     color_ = color;
 }
 
@@ -102,6 +102,6 @@ MoveDirs Pawn::Dirs() const {
     return MoveDirs { {}, 0 };
 }
 
-Pawn::Pawn(int color) {
+Pawn::Pawn(uint8_t color) {
     color_ = color;
 }

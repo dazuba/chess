@@ -1,7 +1,9 @@
 #pragma once
+
+#include <memory>
+
 #include "coordinate.h"
 #include "pieces.h"
-#include <memory>
 
 struct Move {
     Coordinate from, to;

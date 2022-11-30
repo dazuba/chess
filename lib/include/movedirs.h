@@ -1,9 +1,10 @@
 #pragma once
-#include "coordinate.h"
+
 #include <vector>
 
-struct MoveDirs
-{
+#include "coordinate.h"
+
+struct MoveDirs {
     std::vector<Coordinate> dirs;
-    int steps;
+    uint8_t steps;
 };

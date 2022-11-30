@@ -1,15 +1,17 @@
 #pragma once
+
 #include "movedirs.h"
 
 class Piece {
 protected:
-    int color_;
+    uint8_t color_;
 
 public:
-    Piece(int color);
+    Piece(uint8_t color);
     Piece() = default;
+    virtual ~Piece() = default;
 
-    int GetColor() const;
+    uint8_t GetColor() const;
 
     virtual MoveDirs Dirs() const = 0;
 };
@@ -18,40 +20,40 @@ class King : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    King(int color);
+    King(uint8_t color);
 };
 
 class Queen : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Queen(int color);
+    Queen(uint8_t color);
 };
 
 class Rook : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Rook(int color);
+    Rook(uint8_t color);
 };
 
 class Bishop : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Bishop(int color);
+    Bishop(uint8_t color);
 };
 
 class Knight : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Knight(int color);
+    Knight(uint8_t color);
 };
 
 class Pawn : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Pawn(int color);
+    Pawn(uint8_t color);
 };

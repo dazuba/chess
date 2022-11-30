@@ -1,10 +1,10 @@
 #pragma once
+
+#include <cstddef>
+
 class Coordinate {
 public:
-    int x, y;
-
-    Coordinate(int x, int y);
-
+    Coordinate(size_t x, size_t y);
     Coordinate(const Coordinate& other);
 
     Coordinate& operator+=(const Coordinate& other);
@@ -13,4 +13,10 @@ public:
     bool operator==(const Coordinate& other) const;
 
     bool IsValid() const;
+    size_t GetX() const;
+    size_t GetY() const;
+
+private:
+    size_t x_;
+    size_t y_;
 };
