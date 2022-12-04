@@ -5,4 +5,3 @@ target_sources(chess
         main.cpp
 )
 
-target_link_libraries(chess PRIVATE lib)

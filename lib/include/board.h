@@ -30,10 +30,10 @@ public:
     std::shared_ptr<Piece>& operator[](const Coordinate& crd);
     const std::shared_ptr<Piece>& operator[](const Coordinate& crd) const;
 
+    static const size_t BOARD_SIZE = 8;
+
 private:
     void MakeMoveUnlocked(const Coordinate& crd1, const Coordinate& crd2);
-
-    static const size_t BOARD_SIZE = 8;
 
     std::vector<std::vector<std::shared_ptr<Piece>>> data_;
 };

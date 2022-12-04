@@ -15,7 +15,6 @@ Board::Board() {
         for (size_t i = 0; i < BOARD_SIZE; ++i) {
             data_[i][color * 5 + 1] =
                 std::dynamic_pointer_cast<Piece>(std::make_shared<Pawn>(color));
-            ;
         }
     }
 }
@@ -41,6 +40,7 @@ void Board::MakeMove(const Coordinate& crd1, const Coordinate& crd2) {
         // TODO throw exception
     }
     MakeMoveUnlocked(crd1, crd2);
+    (*this)[crd2]->isMoved = true;
 }
 
 std::shared_ptr<Piece>& Board::operator[](const Coordinate& crd) {
@@ -56,8 +56,23 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
     uint8_t color = GetPiece(crd)->GetColor();
     std::vector<Coordinate> validMoves;
 
-    if (dirs.steps == 0) {
-        // пешка ходить не будет
+    if (std::dynamic_pointer_cast<Pawn>((*this)[crd]) != nullptr) {
+        for (int i = 0; i < 2; i++) {
+            if ((*this)[crd + dirs.dirs[i]] != nullptr && 
+                (*this)[crd + dirs.dirs[i]]->GetColor() != color) {
+                validMoves.push_back(crd + dirs.dirs[i]);
+            }
+        }
+ 
+        if ((*this)[crd + dirs.dirs[2]] == nullptr) {
+            validMoves.push_back(crd + dirs.dirs[2]);
+        }
+
+        if (dirs.dirs.size() == 4 && (*this)[crd + dirs.dirs[2]] == nullptr && 
+            (*this)[crd + dirs.dirs[3]] == nullptr) {
+            validMoves.push_back(crd + dirs.dirs[2]);
+        }
+
         return validMoves;
     }
 
@@ -76,6 +91,12 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
                 break;
             }
             validMoves.push_back(curCrd);
+        }
+    }
+
+    if (std::dynamic_pointer_cast<King>((*this)[crd]) != nullptr) {
+        if (!(*this)[crd]->isMoved) {
+            
         }
     }
 

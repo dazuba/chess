@@ -14,6 +14,8 @@ public:
     uint8_t GetColor() const;
 
     virtual MoveDirs Dirs() const = 0;
+
+    bool isMoved = false;
 };
 
 class King : public Piece {

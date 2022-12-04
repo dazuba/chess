@@ -99,7 +99,20 @@ Knight::Knight(uint8_t color) {
 }
 
 MoveDirs Pawn::Dirs() const {
-    return MoveDirs { {}, 0 };
+    auto moveDirs = MoveDirs { 
+        {
+            Coordinate(-1, 1 - 2 * color_),
+            Coordinate(1, 1 - 2 * color_),
+            Coordinate(0, 1 - 2 * color_)
+        },
+        1
+    };
+
+    if (!isMoved) {
+        moveDirs.dirs.push_back(Coordinate(0, 2 - 4 * color_));
+    }
+
+    return moveDirs;
 }
 
 Pawn::Pawn(uint8_t color) {
