@@ -4,7 +4,6 @@ target_sources(lib
     PRIVATE
         impl/board.cpp
         impl/coordinate.cpp
-        impl/game.cpp
         impl/pieces.cpp
 )
 
