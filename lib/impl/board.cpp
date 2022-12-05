@@ -266,7 +266,7 @@ bool Board::IsCheck(int8_t color) const {
 bool Board::IsStalemate(int8_t color) const {
     for (size_t i = 0; i < BOARD_SIZE; ++i) {
         for (size_t j = 0; j < BOARD_SIZE; ++j) {
-            if (data_[i][j]->GetColor() == color) {
+            if (data_[i][j] != nullptr && data_[i][j]->GetColor() == color) {
                 auto validMoves = ValidMoves(Coordinate(i, j));
                 if (!validMoves.empty()) {
                     return false;
