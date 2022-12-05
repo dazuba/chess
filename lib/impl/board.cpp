@@ -42,8 +42,9 @@ bool Board::IsLongCastle(const Move& move) const {
 bool Board::CanShortCastle(const Coordinate& crd) const {
     const auto piece = (*this)[crd];
     if (std::dynamic_pointer_cast<King>(piece) != nullptr &&
+        piece->GetFirstMove() == -1 &&
         std::dynamic_pointer_cast<Rook>((*this)[crd + Coordinate(3, 0)]) != nullptr &&
-        piece->GetFirstMove() == -1 && (*this)[crd + Coordinate(3, 0)]->GetFirstMove() == -1 &&
+        (*this)[crd + Coordinate(3, 0)]->GetFirstMove() == -1 &&
         !IsCheck(piece->GetColor())) {
         for (size_t i = 1; i <= 2; ++i) {
             const auto newCrd = crd + Coordinate(i, 0);
@@ -59,8 +60,9 @@ bool Board::CanShortCastle(const Coordinate& crd) const {
 bool Board::CanLongCastle(const Coordinate& crd) const {
     const auto piece = (*this)[crd];
     if (std::dynamic_pointer_cast<King>(piece) != nullptr &&
+        piece->GetFirstMove() == -1 &&
         std::dynamic_pointer_cast<Rook>((*this)[crd + Coordinate(-4, 0)]) != nullptr &&
-        piece->GetFirstMove() == -1 && (*this)[crd + Coordinate(-4, 0)]->GetFirstMove() == -1 &&
+        (*this)[crd + Coordinate(-4, 0)]->GetFirstMove() == -1 &&
         !IsCheck(piece->GetColor())) {
         for (size_t i = 1; i <= 3; ++i) {
             const auto newCrd = crd - Coordinate(i, 0);
@@ -107,7 +109,7 @@ void Board::MakeMove(const Move& move) {
         SetFirstMove(move.from + Coordinate(-1, 0));
     } else if (std::dynamic_pointer_cast<Pawn>((*this)[move.from]) != nullptr &&
                (*this)[move.to] == nullptr && move.from.GetX() != move.to.GetX()) {
-        (*this)[move.from + Coordinate(move.to.GetX(), move.from.GetY())] = nullptr;
+        (*this)[Coordinate(move.to.GetX(), move.from.GetY())] = nullptr;
         MakeMoveUnlocked(move);
         SetFirstMove(move.to);
     } else {
