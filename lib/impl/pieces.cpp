@@ -33,6 +33,10 @@ MoveDirs King::Dirs() const {
 King::King(int8_t color) : Piece(color) {
 }
 
+std::string King::GetName() const {
+    return "king" + std::to_string(GetColor());
+}
+
 MoveDirs Queen::Dirs() const {
     return MoveDirs {
         {
@@ -52,6 +56,10 @@ MoveDirs Queen::Dirs() const {
 Queen::Queen(int8_t color) : Piece(color) {
 }
 
+std::string Queen::GetName() const {
+    return "queen" + std::to_string(GetColor());
+}
+
 MoveDirs Rook::Dirs() const {
     return MoveDirs {
         {
@@ -67,6 +75,10 @@ MoveDirs Rook::Dirs() const {
 Rook::Rook(int8_t color) : Piece(color) {
 }
 
+std::string Rook::GetName() const {
+    return "rook" + std::to_string(GetColor());
+}
+
 MoveDirs Bishop::Dirs() const {
     return MoveDirs {
         {
@@ -80,6 +92,10 @@ MoveDirs Bishop::Dirs() const {
 }
 
 Bishop::Bishop(int8_t color) : Piece(color) {
+}
+
+std::string Bishop::GetName() const {
+    return "bishop" + std::to_string(GetColor());
 }
 
 MoveDirs Knight::Dirs() const {
@@ -101,6 +117,10 @@ MoveDirs Knight::Dirs() const {
 Knight::Knight(int8_t color) : Piece(color) {
 }
 
+std::string Knight::GetName() const {
+    return "knight" + std::to_string(GetColor());
+}
+
 MoveDirs Pawn::Dirs() const {
     auto moveDirs = MoveDirs { 
         {
@@ -116,4 +136,8 @@ MoveDirs Pawn::Dirs() const {
 }
 
 Pawn::Pawn(int8_t color) : Piece(color) {
+}
+
+std::string Pawn::GetName() const {
+    return "pawn" + std::to_string(GetColor());
 }
