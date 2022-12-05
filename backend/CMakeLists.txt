@@ -1,13 +1,13 @@
-add_library(lib STATIC)
+add_library(backend STATIC)
 
-target_sources(lib
+target_sources(backend
     PRIVATE
         impl/board.cpp
         impl/coordinate.cpp
         impl/pieces.cpp
 )
 
-target_include_directories(lib
+target_include_directories(backend
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/impl
 )

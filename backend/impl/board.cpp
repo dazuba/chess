@@ -239,7 +239,7 @@ std::vector<Coordinate> Board::AttackedSquares(const Coordinate& crd) const {
 Coordinate Board::FindKing(int8_t color) const {
     for (size_t i = 0; i < BOARD_SIZE; ++i) {
         for (size_t j = 0; j < BOARD_SIZE; ++j) {
-            if (dynamic_cast<King*>(data_[i][j].get()) != nullptr &&
+            if (std::dynamic_pointer_cast<King>(data_[i][j]) != nullptr &&
                 data_[i][j]->GetColor() == color) {
                 return Coordinate(i, j);
             }
