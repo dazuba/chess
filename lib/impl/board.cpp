@@ -41,11 +41,9 @@ bool Board::IsLongCastle(const Move& move) const {
 
 bool Board::CanShortCastle(const Coordinate& crd) const {
     const auto piece = (*this)[crd];
-    if (std::dynamic_pointer_cast<King>(piece) != nullptr &&
-        piece->GetFirstMove() == -1 &&
+    if (std::dynamic_pointer_cast<King>(piece) != nullptr && piece->GetFirstMove() == -1 &&
         std::dynamic_pointer_cast<Rook>((*this)[crd + Coordinate(3, 0)]) != nullptr &&
-        (*this)[crd + Coordinate(3, 0)]->GetFirstMove() == -1 &&
-        !IsCheck(piece->GetColor())) {
+        (*this)[crd + Coordinate(3, 0)]->GetFirstMove() == -1 && !IsCheck(piece->GetColor())) {
         for (size_t i = 1; i <= 2; ++i) {
             const auto newCrd = crd + Coordinate(i, 0);
             if ((*this)[newCrd] != nullptr || CheckForCheck({crd, newCrd})) {
@@ -59,11 +57,9 @@ bool Board::CanShortCastle(const Coordinate& crd) const {
 
 bool Board::CanLongCastle(const Coordinate& crd) const {
     const auto piece = (*this)[crd];
-    if (std::dynamic_pointer_cast<King>(piece) != nullptr &&
-        piece->GetFirstMove() == -1 &&
+    if (std::dynamic_pointer_cast<King>(piece) != nullptr && piece->GetFirstMove() == -1 &&
         std::dynamic_pointer_cast<Rook>((*this)[crd + Coordinate(-4, 0)]) != nullptr &&
-        (*this)[crd + Coordinate(-4, 0)]->GetFirstMove() == -1 &&
-        !IsCheck(piece->GetColor())) {
+        (*this)[crd + Coordinate(-4, 0)]->GetFirstMove() == -1 && !IsCheck(piece->GetColor())) {
         for (size_t i = 1; i <= 3; ++i) {
             const auto newCrd = crd - Coordinate(i, 0);
             if ((*this)[newCrd] != nullptr || CheckForCheck({crd, newCrd})) {
@@ -112,6 +108,10 @@ void Board::MakeMove(const Move& move) {
         (*this)[Coordinate(move.to.GetX(), move.from.GetY())] = nullptr;
         MakeMoveUnlocked(move);
         SetFirstMove(move.to);
+    } else if (std::dynamic_pointer_cast<Pawn>((*this)[move.from]) != nullptr &&
+               move.to.GetY() == GetColorRow((*this)[move.from]->GetColor() ^ 1)) {
+        MakeMoveUnlocked(move);
+        (*this)[move.to] = std::make_shared<Queen>((*this)[move.to]->GetColor());
     } else {
         MakeMoveUnlocked(move);
         SetFirstMove(move.to);
