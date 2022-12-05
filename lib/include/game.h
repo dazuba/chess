@@ -9,7 +9,6 @@ class Game {
 private:
     std::vector<Move> moves;
     Board board;
-    // uint8_t moveColor;
 
     void MakeMove(const Coordinate& crd1, const Coordinate& crd2);
 };
