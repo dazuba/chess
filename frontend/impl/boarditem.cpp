@@ -1,7 +1,11 @@
 #include "boarditem.h"
 
-BoardItem::BoardItem(const QString& fileName, QSvgRenderer* renderer) : QGraphicsSvgItem(fileName) {
-    setSharedRenderer(renderer);
+BoardItem::BoardItem() : QGraphicsSvgItem("../media/board.svg") {
+    setScale(80);
 }
 
 BoardItem::~BoardItem() {}
+
+// QRectF BoardItem::boundingRect() const {
+//     return QRectF(0, 0, 1, 1);
+// }

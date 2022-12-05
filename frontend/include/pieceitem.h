@@ -2,10 +2,10 @@
 
 #include <QGraphicsSvgItem>
 
-class BoardItem : public QGraphicsSvgItem {
+class PieceItem : public QGraphicsSvgItem {
 public:
-    BoardItem();
-    ~BoardItem();
+    PieceItem(const QString& fileName);
+    ~PieceItem();
 
 private:
     // QRectF boundingRect() const override;

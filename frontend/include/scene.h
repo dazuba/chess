@@ -1,9 +1,11 @@
 #pragma once
 
 #include <QGraphicsScene>
-#include <QSvgRenderer>
+#include <vector>
 
+#include "board.h"
 #include "boarditem.h"
+#include "pieceitem.h"
 
 class Scene : public QGraphicsScene {
     Q_OBJECT
@@ -13,6 +15,11 @@ public:
     ~Scene();
 
 private:
-    BoardItem* board_;
+    void DrawBoard();
+
+    Board board_;
+    BoardItem* boarditem_;
     QSvgRenderer* renderer_;
+
+    std::vector<PieceItem*> items_;
 };

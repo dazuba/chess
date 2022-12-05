@@ -11,4 +11,4 @@ add_subdirectory(backend)
 add_subdirectory(frontend)
 
 FILE(COPY media DESTINATION "${CMAKE_BINARY_DIR}")
-target_link_libraries(frontend Qt6::Core Qt6::Gui Qt6::SvgWidgets Qt6::Widgets)
+target_link_libraries(frontend backend Qt6::Core Qt6::Gui Qt6::SvgWidgets Qt6::Widgets)

@@ -4,9 +4,11 @@ target_sources(frontend
     PRIVATE
         impl/boarditem.cpp
         impl/mainwidget.cpp
+        impl/pieceitem.cpp
         impl/scene.cpp
         include/boarditem.h
         include/mainwidget.h
+        include/pieceitem.h
         include/scene.h
 )
 
