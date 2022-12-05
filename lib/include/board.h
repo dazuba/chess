@@ -20,6 +20,7 @@ public:
     bool CheckForCheck(const Move& move) const;
 
     std::vector<Coordinate> ValidMoves(const Coordinate& crd) const;
+    std::vector<Coordinate> AttackedSquares(const Coordinate& crd) const;
 
     bool IsValidMove(const Move& move) const;
 

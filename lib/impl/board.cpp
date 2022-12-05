@@ -201,6 +201,41 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
     return validMoves;
 }
 
+std::vector<Coordinate> Board::AttackedSquares(const Coordinate& crd) const {
+    MoveDirs dirs = (*this)[crd]->Dirs();
+    int8_t color = (*this)[crd]->GetColor();
+    std::vector<Coordinate> attacked;
+
+    if (std::dynamic_pointer_cast<Pawn>((*this)[crd]) != nullptr) {
+        for (int i = 0; i < 2; i++) {
+            if ((*this)[crd + dirs.dirs[i]] != nullptr && 
+                (*this)[crd + dirs.dirs[i]]->GetColor() != color) {
+                attacked.push_back(crd + dirs.dirs[i]);
+            }
+        }
+        return attacked;
+    }
+
+    for (const auto& dir : dirs.dirs) {
+        Coordinate curCrd = crd;
+        for (uint8_t i = 0; i < dirs.steps; ++i) {
+            curCrd += dir;
+            if (!curCrd.IsValid()) {
+                break;
+            }
+            if ((*this)[curCrd] != nullptr) {
+                int8_t otherColor = (*this)[curCrd]->GetColor();
+                if (color != otherColor) {
+                    attacked.push_back(curCrd);
+                }
+                break;
+            }
+            attacked.push_back(curCrd);
+        }
+    }
+    return attacked;
+}
+
 Coordinate Board::FindKing(int8_t color) const {
     for (size_t i = 0; i < BOARD_SIZE; ++i) {
         for (size_t j = 0; j < BOARD_SIZE; ++j) {
@@ -218,8 +253,8 @@ bool Board::IsCheck(int8_t color) const {
     for (size_t i = 0; i < BOARD_SIZE; ++i) {
         for (size_t j = 0; j < BOARD_SIZE; ++j) {
             if (data_[i][j] != nullptr && data_[i][j]->GetColor() != color) {
-                std::vector<Coordinate> validMoves = ValidMoves(Coordinate(i, j));
-                if (std::find(validMoves.begin(), validMoves.end(), kingCrd) != validMoves.end()) {
+                std::vector<Coordinate> attacked = AttackedSquares(Coordinate(i, j));
+                if (std::find(attacked.begin(), attacked.end(), kingCrd) != attacked.end()) {
                     return true;
                 }
             }
@@ -233,10 +268,8 @@ bool Board::IsStalemate(int8_t color) const {
         for (size_t j = 0; j < BOARD_SIZE; ++j) {
             if (data_[i][j]->GetColor() == color) {
                 auto validMoves = ValidMoves(Coordinate(i, j));
-                for (auto crd : validMoves) {
-                    if (IsValidMove(Move{Coordinate(i, j), crd})) {
-                        return false;
-                    }
+                if (!validMoves.empty()) {
+                    return false;
                 }
             }
         }
