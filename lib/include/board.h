@@ -10,7 +10,7 @@
 class Board {
 public:
     Board();
-    
+
     bool IsShortCastle(const Move& move) const;
     bool IsLongCastle(const Move& move) const;
 
@@ -38,10 +38,14 @@ public:
 
     static const size_t BOARD_SIZE = 8;
 
-    int32_t GetMoveNum();
+    int32_t GetMoveNum() const;
+
+    int8_t GetStepColor() const;
 
 private:
     void MakeMoveUnlocked(const Move& move);
+
+    void SetFirstMove(const Coordinate& crd) const;
 
     std::vector<std::vector<std::shared_ptr<Piece>>> data_;
 

@@ -22,6 +22,10 @@ Coordinate Coordinate::operator+(const Coordinate& other) const {
     return Coordinate(x_ + other.x_, y_ + other.y_);
 }
 
+Coordinate Coordinate::operator-(const Coordinate& other) const {
+    return Coordinate(x_ - other.x_, y_ - other.y_);
+}
+
 bool Coordinate::operator==(const Coordinate& other) const {
     return x_ == other.x_ && y_ == other.y_;
 }
