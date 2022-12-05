@@ -141,28 +141,31 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
 
     if (std::dynamic_pointer_cast<Pawn>((*this)[crd]) != nullptr) {
         for (int i = 0; i < 2; i++) {
-            if ((*this)[crd + dirs.dirs[i]] != nullptr && 
+            if ((crd + dirs.dirs[i]).IsValid() && (*this)[crd + dirs.dirs[i]] != nullptr && 
                 (*this)[crd + dirs.dirs[i]]->GetColor() != color &&
                 !CheckForCheck({crd, crd + dirs.dirs[i]})) {
                 validMoves.push_back(crd + dirs.dirs[i]);
             }
-            if (std::dynamic_pointer_cast<Pawn>((*this)[crd + Coordinate(dirs.dirs[i].GetX(), 0)]) != nullptr &&
+            if ((crd + dirs.dirs[i]).IsValid() &&
+                std::dynamic_pointer_cast<Pawn>((*this)[crd + Coordinate(dirs.dirs[i].GetX(), 0)]) != nullptr &&
                 (*this)[crd + Coordinate(dirs.dirs[i].GetX(), 0)]->GetFirstMove() + 1 == moveNum &&
                 crd.GetY() == static_cast<size_t>(4 - color)) {
                 validMoves.push_back(crd + dirs.dirs[i]);
             }
         }
  
-        if ((*this)[crd + dirs.dirs[2]] == nullptr &&
+        if ((crd + dirs.dirs[2]).IsValid() &&
+            (*this)[crd + dirs.dirs[2]] == nullptr &&
             !CheckForCheck({crd, crd + dirs.dirs[2]})) {
             validMoves.push_back(crd + dirs.dirs[2]);
         }
 
-        if ((*this)[crd]->GetFirstMove() == -1 &&
+        if ((crd + dirs.dirs[3]).IsValid() &&
+            (*this)[crd]->GetFirstMove() == -1 &&
             (*this)[crd + dirs.dirs[2]] == nullptr && 
             (*this)[crd + dirs.dirs[3]] == nullptr &&
             !CheckForCheck({crd, crd + dirs.dirs[2]})) {
-            validMoves.push_back(crd + dirs.dirs[2]);
+            validMoves.push_back(crd + dirs.dirs[3]);
         }
 
         return validMoves;
@@ -175,17 +178,16 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
             if (!curCrd.IsValid()) {
                 break;
             }
-            if (CheckForCheck({crd, curCrd})) {
-                continue;
-            }
             if ((*this)[curCrd] != nullptr) {
                 int8_t otherColor = (*this)[curCrd]->GetColor();
-                if (color != otherColor) {
+                if (color != otherColor && !CheckForCheck({crd, curCrd})) {
                     validMoves.push_back(curCrd);
                 }
                 break;
             }
-            validMoves.push_back(curCrd);
+            if (!CheckForCheck({crd, curCrd})) {
+                validMoves.push_back(curCrd);
+            }
         }
     }
 
@@ -208,7 +210,7 @@ std::vector<Coordinate> Board::AttackedSquares(const Coordinate& crd) const {
 
     if (std::dynamic_pointer_cast<Pawn>((*this)[crd]) != nullptr) {
         for (int i = 0; i < 2; i++) {
-            if ((*this)[crd + dirs.dirs[i]] != nullptr && 
+            if ((crd + dirs.dirs[i]).IsValid() && (*this)[crd + dirs.dirs[i]] != nullptr && 
                 (*this)[crd + dirs.dirs[i]]->GetColor() != color) {
                 attacked.push_back(crd + dirs.dirs[i]);
             }
@@ -245,7 +247,7 @@ Coordinate Board::FindKing(int8_t color) const {
             }
         }
     }
-    throw std::runtime_error("No king on board(king wend mad)");
+    throw std::runtime_error("No king on board(developer went mad)");
 }
 
 bool Board::IsCheck(int8_t color) const {
