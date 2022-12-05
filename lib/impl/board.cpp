@@ -141,7 +141,7 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
 
     if (std::dynamic_pointer_cast<Pawn>((*this)[crd]) != nullptr) {
         for (int i = 0; i < 2; i++) {
-            if ((*this)[crd + dirs.dirs[i]] != nullptr && 
+            if ((crd + dirs.dirs[i]).IsValid && (*this)[crd + dirs.dirs[i]] != nullptr && 
                 (*this)[crd + dirs.dirs[i]]->GetColor() != color &&
                 !CheckForCheck({crd, crd + dirs.dirs[i]})) {
                 validMoves.push_back(crd + dirs.dirs[i]);
@@ -162,7 +162,7 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
             (*this)[crd + dirs.dirs[2]] == nullptr && 
             (*this)[crd + dirs.dirs[3]] == nullptr &&
             !CheckForCheck({crd, crd + dirs.dirs[2]})) {
-            validMoves.push_back(crd + dirs.dirs[2]);
+            validMoves.push_back(crd + dirs.dirs[3]);
         }
 
         return validMoves;
@@ -175,17 +175,16 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
             if (!curCrd.IsValid()) {
                 break;
             }
-            if (CheckForCheck({crd, curCrd})) {
-                continue;
-            }
             if ((*this)[curCrd] != nullptr) {
                 int8_t otherColor = (*this)[curCrd]->GetColor();
-                if (color != otherColor) {
+                if (color != otherColor && !CheckForCheck({cur, curCrd})) {
                     validMoves.push_back(curCrd);
                 }
                 break;
             }
-            validMoves.push_back(curCrd);
+            if (!CheckForCheck({cur, curCrd})) {
+                validMoves.push_back(curCrd);
+            }
         }
     }
 
@@ -208,7 +207,7 @@ std::vector<Coordinate> Board::AttackedSquares(const Coordinate& crd) const {
 
     if (std::dynamic_pointer_cast<Pawn>((*this)[crd]) != nullptr) {
         for (int i = 0; i < 2; i++) {
-            if ((*this)[crd + dirs.dirs[i]] != nullptr && 
+            if ((crd + dirs.dirs[i]).IsValid() && (*this)[crd + dirs.dirs[i]] != nullptr && 
                 (*this)[crd + dirs.dirs[i]]->GetColor() != color) {
                 attacked.push_back(crd + dirs.dirs[i]);
             }
