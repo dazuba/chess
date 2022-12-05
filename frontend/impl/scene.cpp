@@ -21,10 +21,11 @@ void Scene::DrawBoard() {
     items_.clear();
     for (size_t i = 0; i < Board::BOARD_SIZE; ++i) {
         for (size_t j = 0; j < Board::BOARD_SIZE; ++j) {
-            auto p = board_.GetPiece(Coordinate(i, j));
+            size_t jj = Board::BOARD_SIZE - j - 1;
+            auto p = board_[Coordinate(i, j)];
             if (p != nullptr) {
-                PieceItem* item = new PieceItem("../media/black_king.svg");
-                item->setPos(15 + 80 * i, 35 + 80 * j);
+                PieceItem* item = new PieceItem(QString::fromStdString("../media/" + p->GetName() + ".svg"));
+                item->setPos(15 + 80 * i, 35 + 80 * jj);
                 addItem(item);
                 items_.push_back(item);
             }
