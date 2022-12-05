@@ -1,8 +1,8 @@
 #pragma once
 
-#include "movedirs.h"
-
 #include <string>
+
+#include "movedirs.h"
 
 class Piece {
 public:

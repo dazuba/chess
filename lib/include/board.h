@@ -11,22 +11,9 @@ class Board {
 public:
     Board();
 
-    bool IsShortCastle(const Move& move) const;
-    bool IsLongCastle(const Move& move) const;
-
-    bool CanShortCastle(const Coordinate& crd) const;
-    bool CanLongCastle(const Coordinate& crd) const;
-
-    bool CheckForCheck(const Move& move) const;
-
     std::vector<Coordinate> ValidMoves(const Coordinate& crd) const;
-    std::vector<Coordinate> AttackedSquares(const Coordinate& crd) const;
-
-    bool IsValidMove(const Move& move) const;
 
     void MakeMove(const Move& move);
-
-    Coordinate FindKing(int8_t color) const;
 
     bool IsCheck(int8_t color) const;
 
@@ -47,6 +34,18 @@ private:
     void MakeMoveUnlocked(const Move& move);
 
     void SetFirstMove(const Coordinate& crd) const;
+
+    Coordinate FindKing(int8_t color) const;
+
+    bool IsValidMove(const Move& move) const;
+    bool CheckForCheck(const Move& move) const;
+    std::vector<Coordinate> AttackedSquares(const Coordinate& crd) const;
+
+    bool IsShortCastle(const Move& move) const;
+    bool IsLongCastle(const Move& move) const;
+
+    bool CanShortCastle(const Coordinate& crd) const;
+    bool CanLongCastle(const Coordinate& crd) const;
 
     std::vector<std::vector<std::shared_ptr<Piece>>> data_;
 

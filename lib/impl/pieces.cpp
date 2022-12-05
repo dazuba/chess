@@ -1,6 +1,7 @@
 #include "pieces.h"
 
-Piece::Piece(int8_t color) : color_(color) {}
+Piece::Piece(int8_t color) : color_(color) {
+}
 
 int8_t Piece::GetColor() const {
     return color_;
@@ -15,19 +16,9 @@ int32_t Piece::GetFirstMove() const {
 }
 
 MoveDirs King::Dirs() const {
-    return MoveDirs {
-        {
-            Coordinate(0, 1),
-            Coordinate(1, 1),
-            Coordinate(1, 0),
-            Coordinate(1, -1),
-            Coordinate(0, -1),
-            Coordinate(-1, -1),
-            Coordinate(-1, 0),
-            Coordinate(-1, 1)
-        }, 
-        1
-    };
+    return MoveDirs{{Coordinate(0, 1), Coordinate(1, 1), Coordinate(1, 0), Coordinate(1, -1),
+                     Coordinate(0, -1), Coordinate(-1, -1), Coordinate(-1, 0), Coordinate(-1, 1)},
+                    1};
 }
 
 King::King(int8_t color) : Piece(color) {
@@ -38,19 +29,9 @@ std::string King::GetName() const {
 }
 
 MoveDirs Queen::Dirs() const {
-    return MoveDirs {
-        {
-            Coordinate(0, 1),
-            Coordinate(1, 1),
-            Coordinate(1, 0),
-            Coordinate(1, -1),
-            Coordinate(0, -1),
-            Coordinate(-1, -1),
-            Coordinate(-1, 0),
-            Coordinate(-1, 1)
-        }, 
-        7
-    };
+    return MoveDirs{{Coordinate(0, 1), Coordinate(1, 1), Coordinate(1, 0), Coordinate(1, -1),
+                     Coordinate(0, -1), Coordinate(-1, -1), Coordinate(-1, 0), Coordinate(-1, 1)},
+                    7};
 }
 
 Queen::Queen(int8_t color) : Piece(color) {
@@ -61,15 +42,7 @@ std::string Queen::GetName() const {
 }
 
 MoveDirs Rook::Dirs() const {
-    return MoveDirs {
-        {
-            Coordinate(0, 1),
-            Coordinate(1, 0),
-            Coordinate(0, -1),
-            Coordinate(-1, 0)
-        }, 
-        7
-    };
+    return MoveDirs{{Coordinate(0, 1), Coordinate(1, 0), Coordinate(0, -1), Coordinate(-1, 0)}, 7};
 }
 
 Rook::Rook(int8_t color) : Piece(color) {
@@ -80,15 +53,8 @@ std::string Rook::GetName() const {
 }
 
 MoveDirs Bishop::Dirs() const {
-    return MoveDirs {
-        {
-            Coordinate(1, 1),
-            Coordinate(1, -1),
-            Coordinate(-1, -1),
-            Coordinate(-1, 1)
-        }, 
-        7
-    };
+    return MoveDirs{{Coordinate(1, 1), Coordinate(1, -1), Coordinate(-1, -1), Coordinate(-1, 1)},
+                    7};
 }
 
 Bishop::Bishop(int8_t color) : Piece(color) {
@@ -99,19 +65,9 @@ std::string Bishop::GetName() const {
 }
 
 MoveDirs Knight::Dirs() const {
-    return MoveDirs {
-        {
-            Coordinate(1, 2),
-            Coordinate(2, 1),
-            Coordinate(2, -1),
-            Coordinate(1, -2),
-            Coordinate(-1, -2),
-            Coordinate(-2, -1),
-            Coordinate(-2, 1),
-            Coordinate(-1, 2)
-        }, 
-        1
-    };
+    return MoveDirs{{Coordinate(1, 2), Coordinate(2, 1), Coordinate(2, -1), Coordinate(1, -2),
+                     Coordinate(-1, -2), Coordinate(-2, -1), Coordinate(-2, 1), Coordinate(-1, 2)},
+                    1};
 }
 
 Knight::Knight(int8_t color) : Piece(color) {
@@ -122,16 +78,10 @@ std::string Knight::GetName() const {
 }
 
 MoveDirs Pawn::Dirs() const {
-    auto moveDirs = MoveDirs { 
-        {
-            Coordinate(-1, 1 - 2 * color_),
-            Coordinate(1, 1 - 2 * color_),
-            Coordinate(0, 1 - 2 * color_),
-            Coordinate(0, 2 - 4 * color_)
-        },
-        1
-    };
-    
+    auto moveDirs = MoveDirs{{Coordinate(-1, 1 - 2 * color_), Coordinate(1, 1 - 2 * color_),
+                              Coordinate(0, 1 - 2 * color_), Coordinate(0, 2 - 4 * color_)},
+                             1};
+
     return moveDirs;
 }
 
