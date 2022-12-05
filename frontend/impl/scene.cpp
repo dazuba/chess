@@ -39,6 +39,10 @@ void Scene::DrawBoard() {
             }
         }
     }
+
+    qDebug() << board_.IsCheck(board_.GetStepColor());
+    qDebug() << board_.IsStalemate(board_.GetStepColor());
+    qDebug() << board_.IsCheckmate(board_.GetStepColor());
 }
 
 void Scene::ShowAvailableMoves(size_t i, size_t j) {
