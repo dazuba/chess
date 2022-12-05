@@ -141,7 +141,7 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
 
     if (std::dynamic_pointer_cast<Pawn>((*this)[crd]) != nullptr) {
         for (int i = 0; i < 2; i++) {
-            if ((crd + dirs.dirs[i]).IsValid && (*this)[crd + dirs.dirs[i]] != nullptr && 
+            if ((crd + dirs.dirs[i]).IsValid() && (*this)[crd + dirs.dirs[i]] != nullptr && 
                 (*this)[crd + dirs.dirs[i]]->GetColor() != color &&
                 !CheckForCheck({crd, crd + dirs.dirs[i]})) {
                 validMoves.push_back(crd + dirs.dirs[i]);
@@ -177,12 +177,12 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
             }
             if ((*this)[curCrd] != nullptr) {
                 int8_t otherColor = (*this)[curCrd]->GetColor();
-                if (color != otherColor && !CheckForCheck({cur, curCrd})) {
+                if (color != otherColor && !CheckForCheck({crd, curCrd})) {
                     validMoves.push_back(curCrd);
                 }
                 break;
             }
-            if (!CheckForCheck({cur, curCrd})) {
+            if (!CheckForCheck({crd, curCrd})) {
                 validMoves.push_back(curCrd);
             }
         }
@@ -244,7 +244,7 @@ Coordinate Board::FindKing(int8_t color) const {
             }
         }
     }
-    throw std::runtime_error("No king on board(king wend mad)");
+    throw std::runtime_error("No king on board(developer went mad)");
 }
 
 bool Board::IsCheck(int8_t color) const {
