@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cstdint>
 #include <cstddef>
 
 class Coordinate {
 public:
-    Coordinate(size_t x, size_t y);
+    Coordinate(int8_t x, int8_t y);
     Coordinate(const Coordinate& other);
 
     Coordinate& operator+=(const Coordinate& other);

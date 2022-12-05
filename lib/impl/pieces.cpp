@@ -1,9 +1,17 @@
 #include "pieces.h"
 
-Piece::Piece(uint8_t color) : color_(color) {};
+Piece::Piece(int8_t color) : color_(color) {}
 
-uint8_t Piece::GetColor() const {
+int8_t Piece::GetColor() const {
     return color_;
+}
+
+void Piece::SetFirstMove(int32_t moveNum) {
+    firstMove_ = moveNum;
+}
+
+int32_t Piece::GetFirstMove() const {
+    return firstMove_;
 }
 
 MoveDirs King::Dirs() const {
@@ -22,8 +30,7 @@ MoveDirs King::Dirs() const {
     };
 }
 
-King::King(uint8_t color) {
-    color_ = color;
+King::King(int8_t color) : Piece(color) {
 }
 
 MoveDirs Queen::Dirs() const {
@@ -42,8 +49,7 @@ MoveDirs Queen::Dirs() const {
     };
 }
 
-Queen::Queen(uint8_t color) {
-    color_ = color;
+Queen::Queen(int8_t color) : Piece(color) {
 }
 
 MoveDirs Rook::Dirs() const {
@@ -58,8 +64,7 @@ MoveDirs Rook::Dirs() const {
     };
 }
 
-Rook::Rook(uint8_t color) {
-    color_ = color;
+Rook::Rook(int8_t color) : Piece(color) {
 }
 
 MoveDirs Bishop::Dirs() const {
@@ -74,8 +79,7 @@ MoveDirs Bishop::Dirs() const {
     };
 }
 
-Bishop::Bishop(uint8_t color) {
-    color_ = color;
+Bishop::Bishop(int8_t color) : Piece(color) {
 }
 
 MoveDirs Knight::Dirs() const {
@@ -94,8 +98,7 @@ MoveDirs Knight::Dirs() const {
     };
 }
 
-Knight::Knight(uint8_t color) {
-    color_ = color;
+Knight::Knight(int8_t color) : Piece(color) {
 }
 
 MoveDirs Pawn::Dirs() const {
@@ -103,18 +106,14 @@ MoveDirs Pawn::Dirs() const {
         {
             Coordinate(-1, 1 - 2 * color_),
             Coordinate(1, 1 - 2 * color_),
-            Coordinate(0, 1 - 2 * color_)
+            Coordinate(0, 1 - 2 * color_),
+            Coordinate(0, 2 - 4 * color_)
         },
         1
     };
-
-    if (!isMoved) {
-        moveDirs.dirs.push_back(Coordinate(0, 2 - 4 * color_));
-    }
-
+    
     return moveDirs;
 }
 
-Pawn::Pawn(uint8_t color) {
-    color_ = color;
+Pawn::Pawn(int8_t color) : Piece(color) {
 }

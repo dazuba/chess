@@ -3,59 +3,62 @@
 #include "movedirs.h"
 
 class Piece {
-protected:
-    uint8_t color_;
-
 public:
-    Piece(uint8_t color);
-    Piece() = default;
+    explicit Piece(int8_t color);
     virtual ~Piece() = default;
 
-    uint8_t GetColor() const;
+    int8_t GetColor() const;
 
     virtual MoveDirs Dirs() const = 0;
 
-    bool isMoved = false;
+    void SetFirstMove(int32_t moveNum);
+    int32_t GetFirstMove() const;
+
+protected:
+    const int8_t color_;
+
+private:
+    int32_t firstMove_ = -1;
 };
 
 class King : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    King(uint8_t color);
+    King(int8_t color);
 };
 
 class Queen : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Queen(uint8_t color);
+    Queen(int8_t color);
 };
 
 class Rook : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Rook(uint8_t color);
+    Rook(int8_t color);
 };
 
 class Bishop : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Bishop(uint8_t color);
+    Bishop(int8_t color);
 };
 
 class Knight : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Knight(uint8_t color);
+    Knight(int8_t color);
 };
 
 class Pawn : public Piece {
 public:
     MoveDirs Dirs() const override;
 
-    Pawn(uint8_t color);
+    Pawn(int8_t color);
 };

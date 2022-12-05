@@ -1,6 +1,6 @@
 #include "coordinate.h"
 
-Coordinate::Coordinate(size_t x, size_t y) : x_(x), y_(y) {
+Coordinate::Coordinate(int8_t x, int8_t y) : x_(x), y_(y) {
 }
 
 Coordinate::Coordinate(const Coordinate& other) : x_(other.x_), y_(other.y_) {

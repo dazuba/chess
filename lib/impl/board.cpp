@@ -1,46 +1,106 @@
 #include "board.h"
 
+#include <algorithm>
+#include <exception>
+
+namespace {
+    
+size_t GetColorRow(int8_t color) {
+    return color * 7;
+}
+
+} // anonymous namespace
+
 Board::Board() {
     data_ = std::vector<std::vector<std::shared_ptr<Piece>>>(
         BOARD_SIZE, std::vector<std::shared_ptr<Piece>>(BOARD_SIZE));
-    for (uint8_t color = 0; color < 2; ++color) {
-        data_[0][color * 7] = (std::make_shared<Rook>(color));
-        data_[1][color * 7] = (std::make_shared<Knight>(color));
-        data_[2][color * 7] = (std::make_shared<Bishop>(color));
-        data_[3][color * 7] = (std::make_shared<Queen>(color));
-        data_[4][color * 7] = (std::make_shared<King>(color));
-        data_[5][color * 7] = (std::make_shared<Bishop>(color));
-        data_[6][color * 7] = (std::make_shared<Knight>(color));
-        data_[7][color * 7] = (std::make_shared<Rook>(color));
+    for (int8_t color = 0; color <= 1; ++color) {
+        data_[0][GetColorRow(color)] = std::make_shared<Rook>(color);
+        data_[1][GetColorRow(color)] = std::make_shared<Knight>(color);
+        data_[2][GetColorRow(color)] = std::make_shared<Bishop>(color);
+        data_[3][GetColorRow(color)] = std::make_shared<Queen>(color);
+        data_[4][GetColorRow(color)] = std::make_shared<King>(color);
+        data_[5][GetColorRow(color)] = std::make_shared<Bishop>(color);
+        data_[6][GetColorRow(color)] = std::make_shared<Knight>(color);
+        data_[7][GetColorRow(color)] = std::make_shared<Rook>(color);
         for (size_t i = 0; i < BOARD_SIZE; ++i) {
-            data_[i][color * 5 + 1] =
-                std::dynamic_pointer_cast<Piece>(std::make_shared<Pawn>(color));
+            data_[i][GetColorRow(color) ^ 1] = std::make_shared<Pawn>(color);
         }
     }
 }
 
-bool Board::IsValidMove(const Coordinate& crd1, const Coordinate& crd2) const {
-    std::vector<Coordinate> validMoves = ValidMoves(crd1);
-    if (std::find(validMoves.begin(), validMoves.end(), crd2) == validMoves.end()) {
+bool Board::IsShortCastle(const Move& move) const {
+    return std::dynamic_pointer_cast<King>((*this)[move.from]) != nullptr &&
+        move.from + Coordinate(2, 0) == move.to;
+}
+
+bool Board::IsLongCastle(const Move& move) const {
+    return std::dynamic_pointer_cast<King>((*this)[move.from]) != nullptr &&
+        move.from + Coordinate(-2, 0) == move.to;
+}
+
+bool Board::CanShortCastle(const Coordinate& crd) const {
+    const auto piece = (*this)[crd];
+    if (std::dynamic_pointer_cast<King>(piece) != nullptr &&
+        std::dynamic_pointer_cast<Rook>((*this)[crd + Coordinate(3, 0)]) != nullptr &&
+        piece->GetFirstMove() == -1 &&
+        (*this)[crd + Coordinate(3, 0)]->GetFirstMove() == -1 &&
+        !IsCheck(piece->GetColor())) {
+        for (size_t i = 1; i <= 2; ++i) {
+            const auto newCrd = crd + Coordinate(i, 0);
+            if ((*this)[newCrd] != nullptr || CheckForCheck({crd, newCrd})) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Board::CanLongCastle(const Coordinate& crd) const {
+    const auto piece = (*this)[crd];
+    if (std::dynamic_pointer_cast<King>(piece) != nullptr &&
+        std::dynamic_pointer_cast<Rook>((*this)[crd + Coordinate(-4, 0)]) != nullptr &&
+        piece->GetFirstMove() == -1 &&
+        (*this)[crd + Coordinate(-4, 0)]->GetFirstMove() == -1 &&
+        !IsCheck(piece->GetColor())) {
+        for (size_t i = 1; i <= 3; ++i) {
+            const auto newCrd = crd + Coordinate(-i, 0);
+            if ((*this)[newCrd] != nullptr || CheckForCheck({crd, newCrd})) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Board::IsValidMove(const Move& move) const {
+    std::vector<Coordinate> validMoves = ValidMoves(move.from);
+    if (std::find(validMoves.begin(), validMoves.end(), move.to) == validMoves.end()) {
         return false;
     }
 
     Board boardCopy = *this;
-    boardCopy.MakeMoveUnlocked(crd1, crd2);
-    return boardCopy.IsCheck((*this)[crd1]->GetColor());
+    boardCopy.MakeMoveUnlocked(move);
+    return boardCopy.IsCheck((*this)[move.from]->GetColor());
 }
 
-void Board::MakeMoveUnlocked(const Coordinate& crd1, const Coordinate& crd2) {
-    (*this)[crd2] = (*this)[crd1];
-    (*this)[crd1] = nullptr;
+void Board::MakeMoveUnlocked(const Move& move) {
+    std::swap((*this)[move.to], (*this)[move.from]);
+    (*this)[move.from] = nullptr;
 }
 
-void Board::MakeMove(const Coordinate& crd1, const Coordinate& crd2) {
-    if (!IsValidMove(crd1, crd2)) {
-        // TODO throw exception
+void Board::MakeMove(const Move& move) {
+    if (!IsValidMove(move)) {
+        throw std::runtime_error("Invalid move");
     }
-    MakeMoveUnlocked(crd1, crd2);
-    (*this)[crd2]->isMoved = true;
+    MakeMoveUnlocked(move);
+    const auto piece = (*this)[move.to];
+    if (piece->GetFirstMove() == -1) {
+        piece->SetFirstMove(moveNum);
+    }
+    ++moveNum;
 }
 
 std::shared_ptr<Piece>& Board::operator[](const Coordinate& crd) {
@@ -51,25 +111,40 @@ const std::shared_ptr<Piece>& Board::operator[](const Coordinate& crd) const {
     return data_[crd.GetX()][crd.GetY()];
 }
 
+bool Board::CheckForCheck(const Move& move) const {
+    Board boardCopy = *this;
+    boardCopy.MakeMoveUnlocked(move);
+    return boardCopy.IsCheck((*this)[move.from]->GetColor());
+}
+
 std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
-    MoveDirs dirs = GetPiece(crd)->Dirs();
-    uint8_t color = GetPiece(crd)->GetColor();
+    MoveDirs dirs = (*this)[crd]->Dirs();
+    int8_t color = (*this)[crd]->GetColor();
     std::vector<Coordinate> validMoves;
 
     if (std::dynamic_pointer_cast<Pawn>((*this)[crd]) != nullptr) {
         for (int i = 0; i < 2; i++) {
             if ((*this)[crd + dirs.dirs[i]] != nullptr && 
-                (*this)[crd + dirs.dirs[i]]->GetColor() != color) {
+                (*this)[crd + dirs.dirs[i]]->GetColor() != color &&
+                !CheckForCheck({crd, crd + dirs.dirs[i]})) {
+                validMoves.push_back(crd + dirs.dirs[i]);
+            }
+            if (std::dynamic_pointer_cast<Pawn>((*this)[crd + Coordinate(dirs.dirs[i].GetX(), 0)]) != nullptr &&
+                (*this)[crd + Coordinate(dirs.dirs[i].GetX(), 0)]->GetFirstMove() + 1 == moveNum &&
+                crd.GetY() == static_cast<size_t>(4 - color)) {
                 validMoves.push_back(crd + dirs.dirs[i]);
             }
         }
  
-        if ((*this)[crd + dirs.dirs[2]] == nullptr) {
+        if ((*this)[crd + dirs.dirs[2]] == nullptr &&
+            !CheckForCheck({crd, crd + dirs.dirs[2]})) {
             validMoves.push_back(crd + dirs.dirs[2]);
         }
 
-        if (dirs.dirs.size() == 4 && (*this)[crd + dirs.dirs[2]] == nullptr && 
-            (*this)[crd + dirs.dirs[3]] == nullptr) {
+        if ((*this)[crd]->GetFirstMove() == -1 &&
+            (*this)[crd + dirs.dirs[2]] == nullptr && 
+            (*this)[crd + dirs.dirs[3]] == nullptr &&
+            !CheckForCheck({crd, crd + dirs.dirs[2]})) {
             validMoves.push_back(crd + dirs.dirs[2]);
         }
 
@@ -83,8 +158,11 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
             if (!curCrd.IsValid()) {
                 break;
             }
-            if (GetPiece(curCrd) != nullptr) {
-                uint8_t otherColor = GetPiece(curCrd)->GetColor();
+            if (CheckForCheck({crd, curCrd})) {
+                continue;
+            }
+            if ((*this)[curCrd] != nullptr) {
+                int8_t otherColor = (*this)[curCrd]->GetColor();
                 if (color != otherColor) {
                     validMoves.push_back(curCrd);
                 }
@@ -95,15 +173,13 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
     }
 
     if (std::dynamic_pointer_cast<King>((*this)[crd]) != nullptr) {
-        if (!(*this)[crd]->isMoved) {
-            
-        }
+        
     }
 
     return validMoves;
 }
 
-Coordinate Board::FindKing(uint8_t color) const {
+Coordinate Board::FindKing(int8_t color) const {
     for (size_t i = 0; i < BOARD_SIZE; ++i) {
         for (size_t j = 0; j < BOARD_SIZE; ++j) {
             if (dynamic_cast<King*>(data_[i][j].get()) != nullptr &&
@@ -112,11 +188,10 @@ Coordinate Board::FindKing(uint8_t color) const {
             }
         }
     }
-    // TODO exception
-    return {__UINT32_MAX__, __UINT32_MAX__};
+    throw std::runtime_error("No king on board(king wend mad)");
 }
 
-bool Board::IsCheck(uint8_t color) const {
+bool Board::IsCheck(int8_t color) const {
     Coordinate kingCrd = FindKing(color);
     for (size_t i = 0; i < BOARD_SIZE; ++i) {
         for (size_t j = 0; j < BOARD_SIZE; ++j) {
@@ -131,13 +206,13 @@ bool Board::IsCheck(uint8_t color) const {
     return false;
 }
 
-bool Board::IsStalemate(uint8_t color) const {
-    for (uint8_t i = 0; i < BOARD_SIZE; ++i) {
-        for (uint8_t j = 0; j < BOARD_SIZE; ++j) {
+bool Board::IsStalemate(int8_t color) const {
+    for (size_t i = 0; i < BOARD_SIZE; ++i) {
+        for (size_t j = 0; j < BOARD_SIZE; ++j) {
             if (data_[i][j]->GetColor() == color) {
                 auto validMoves = ValidMoves(Coordinate(i, j));
                 for (auto crd : validMoves) {
-                    if (IsValidMove(Coordinate(i, j), crd)) {
+                    if (IsValidMove(Move{Coordinate(i, j), crd})) {
                         return false;
                     }
                 }
@@ -148,6 +223,6 @@ bool Board::IsStalemate(uint8_t color) const {
     return true;
 }
 
-bool Board::IsCheckmate(uint8_t color) const {
+bool Board::IsCheckmate(int8_t color) const {
     return IsStalemate(color) && IsCheck(color);
 }

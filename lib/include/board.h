@@ -10,30 +10,40 @@
 class Board {
 public:
     Board();
+    
+    bool IsShortCastle(const Move& move) const;
+    bool IsLongCastle(const Move& move) const;
 
-    std::shared_ptr<Piece> GetPiece(const Coordinate& crd) const;
+    bool CanShortCastle(const Coordinate& crd) const;
+    bool CanLongCastle(const Coordinate& crd) const;
+
+    bool CheckForCheck(const Move& move) const;
 
     std::vector<Coordinate> ValidMoves(const Coordinate& crd) const;
 
-    bool IsValidMove(const Coordinate& crd1, const Coordinate& crd2) const;
+    bool IsValidMove(const Move& move) const;
 
-    void MakeMove(const Coordinate& crd1, const Coordinate& crd2);
+    void MakeMove(const Move& move);
 
-    Coordinate FindKing(uint8_t color) const;
+    Coordinate FindKing(int8_t color) const;
 
-    bool IsCheck(uint8_t color) const;
+    bool IsCheck(int8_t color) const;
 
-    bool IsCheckmate(uint8_t color) const;
+    bool IsCheckmate(int8_t color) const;
 
-    bool IsStalemate(uint8_t color) const;
+    bool IsStalemate(int8_t color) const;
 
     std::shared_ptr<Piece>& operator[](const Coordinate& crd);
     const std::shared_ptr<Piece>& operator[](const Coordinate& crd) const;
 
     static const size_t BOARD_SIZE = 8;
 
+    int32_t GetMoveNum();
+
 private:
-    void MakeMoveUnlocked(const Coordinate& crd1, const Coordinate& crd2);
+    void MakeMoveUnlocked(const Move& move);
 
     std::vector<std::vector<std::shared_ptr<Piece>>> data_;
+
+    int32_t moveNum = 0;
 };
