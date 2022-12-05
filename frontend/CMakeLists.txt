@@ -1,0 +1,16 @@
+add_library(frontend STATIC)
+
+target_sources(frontend
+    PRIVATE
+        impl/boarditem.cpp
+        impl/mainwidget.cpp
+        impl/scene.cpp
+        include/boarditem.h
+        include/mainwidget.h
+        include/scene.h
+)
+
+target_include_directories(frontend
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/impl
+)
