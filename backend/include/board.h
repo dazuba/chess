@@ -40,6 +40,7 @@ private:
 
     bool IsValidMove(const Move& move) const;
     bool CheckForCheck(const Move& move) const;
+    bool CheckForCheckEnPassant(const Move& move) const;
     std::vector<Coordinate> AttackedSquares(const Coordinate& crd) const;
 
     bool IsShortCastle(const Move& move) const;
