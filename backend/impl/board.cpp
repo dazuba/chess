@@ -134,6 +134,13 @@ bool Board::CheckForCheck(const Move& move) const {
     return boardCopy.IsCheck((*this)[move.from]->GetColor());
 }
 
+bool Board::CheckForCheckEnPassant(const Move& move) const {
+    Board boardCopy = *this;
+    boardCopy.MakeMoveUnlocked(move);
+    boardCopy[Coordinate(move.to.GetX(), move.from.GetY())] = nullptr;
+    return boardCopy.IsCheck((*this)[move.from]->GetColor());
+}
+
 std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
     MoveDirs dirs = (*this)[crd]->Dirs();
     int8_t color = (*this)[crd]->GetColor();
@@ -150,7 +157,8 @@ std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
                 std::dynamic_pointer_cast<Pawn>(
                     (*this)[crd + Coordinate(dirs.dirs[i].GetX(), 0)]) != nullptr &&
                 (*this)[crd + Coordinate(dirs.dirs[i].GetX(), 0)]->GetFirstMove() + 1 == moveNum &&
-                crd.GetY() == static_cast<size_t>(4 - color)) {
+                crd.GetY() == static_cast<size_t>(4 - color) &&
+                !CheckForCheckEnPassant({crd, crd + dirs.dirs[i]})) {
                 validMoves.push_back(crd + dirs.dirs[i]);
             }
         }
@@ -245,7 +253,7 @@ Coordinate Board::FindKing(int8_t color) const {
             }
         }
     }
-    throw std::runtime_error("No king on board(developer went mad)");
+    throw std::runtime_error("No king on board(king went mad)");
 }
 
 bool Board::IsCheck(int8_t color) const {
