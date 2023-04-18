@@ -2,4 +2,6 @@
 
 ./build.sh
 
+mkdir logs
+
 ./build/bin/chess

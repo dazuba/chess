@@ -75,4 +75,6 @@ build/
 
 .DS_Store
 
+logs/
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,cmake,c++
