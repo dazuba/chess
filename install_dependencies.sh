@@ -25,4 +25,4 @@ sudo apt install libqt6svg6-dev
 sudo apt install qt6-base-dev
 
 cd ..
-rm -rf tmp
+sudo rm -rf tmp
