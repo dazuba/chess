@@ -30,8 +30,11 @@ void Scene::DrawBoard() {
         for (size_t j = 0; j < Board::BOARD_SIZE; ++j) {
             auto p = board_[Coordinate(i, j)];
             if (p != nullptr) {
-                PieceItem* item = new PieceItem(QString::fromStdString("../media/" + p->GetName() + ".svg"), i, j, p->GetColor() == board_.GetStepColor());
-                QObject::connect(item, SIGNAL(Clicked(size_t, size_t)), this, SLOT(ShowAvailableMoves(size_t, size_t)));
+                PieceItem* item =
+                    new PieceItem(QString::fromStdString("../media/" + p->GetName() + ".svg"), i, j,
+                                  p->GetColor() == board_.GetStepColor());
+                QObject::connect(item, SIGNAL(Clicked(size_t, size_t)), this,
+                                 SLOT(ShowAvailableMoves(size_t, size_t)));
 
                 item->setPos(GetCoords(i, j, board_.GetStepColor()));
                 addItem(item);
@@ -50,8 +53,9 @@ void Scene::ShowAvailableMoves(size_t i, size_t j) {
     std::vector<Coordinate> moves = board_.ValidMoves(Coordinate(i, j));
     for (const Coordinate& crd : moves) {
         ValidMoveItem* move = new ValidMoveItem(i, j, crd.GetX(), crd.GetY());
-        QObject::connect(move, SIGNAL(Clicked(size_t, size_t, size_t, size_t)), this, SLOT(TryMakeMove(size_t, size_t, size_t, size_t)));
-        
+        QObject::connect(move, SIGNAL(Clicked(size_t, size_t, size_t, size_t)), this,
+                         SLOT(TryMakeMove(size_t, size_t, size_t, size_t)));
+
         move->setPos(GetCoords(crd.GetX(), crd.GetY(), board_.GetStepColor(), 20, 40));
         addItem(move);
         moves_.push_back(move);

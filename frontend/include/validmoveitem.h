@@ -5,7 +5,7 @@
 
 class ValidMoveItem : public QObject, public QGraphicsEllipseItem {
     Q_OBJECT
-    
+
 public:
     ValidMoveItem(size_t fromX_, size_t fromY_, size_t toX_, size_t toY_);
     ~ValidMoveItem();

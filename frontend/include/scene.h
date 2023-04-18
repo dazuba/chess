@@ -20,7 +20,8 @@ public slots:
     void TryMakeMove(size_t fromX_, size_t fromY_, size_t toX_, size_t toY_);
 
 private:
-    QPointF GetCoords(size_t i, size_t j, bool color, size_t offset_x = 15, size_t offset_y = 35) const;
+    QPointF GetCoords(size_t i, size_t j, bool color, size_t offset_x = 15,
+                      size_t offset_y = 35) const;
     void DrawBoard();
 
     void ClearItems();

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QGraphicsSvgItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSvgItem>
 
 class PieceItem : public QGraphicsSvgItem {
     Q_OBJECT
-    
+
 public:
     PieceItem(const QString& fileName, size_t x, size_t y, bool can_move);
     ~PieceItem();
