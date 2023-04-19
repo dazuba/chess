@@ -7,7 +7,7 @@
         }
     ],
     "app": {
-        "document_root": "./html/",
+        "document_root": "./web_frontend/",
         "log": {
             "log_path": "./logs/",
             "log_level": "WARN"

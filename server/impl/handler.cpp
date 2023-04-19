@@ -8,8 +8,8 @@ void Handler::GetValidMoves(const drogon::HttpRequestPtr& req, std::function<voi
         Json::Value movesJson;
         for (const auto& move : moves) {
             Json::Value cord;
-            cord["x"] = move.GetX();
-            cord["y"] = move.GetY();
+            cord["x"] = static_cast<Json::UInt64>(move.GetX());
+            cord["y"] = static_cast<Json::UInt64>(move.GetY());
             movesJson.append(cord);
         }
         auto resp = drogon::HttpResponse::newHttpJsonResponse(movesJson);
@@ -24,7 +24,7 @@ void Handler::GetValidMoves(const drogon::HttpRequestPtr& req, std::function<voi
 void Handler::GetBoard(const drogon::HttpRequestPtr& req, std::function<void (const drogon::HttpResponsePtr&)> &&callback) const {
     Json::Value boardJson;
     Json::Value piecesJson;
-    boardJson["move_num"] = board_.GetMoveNum();
+    boardJson["move_num"] = board_.GetStepColor();
 
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {

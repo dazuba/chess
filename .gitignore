@@ -78,3 +78,5 @@ build/
 logs/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,cmake,c++
+
+.cache
