@@ -20,29 +20,23 @@ void Handler::GetValidMoves(const drogon::HttpRequestPtr& req, std::function<voi
 }
 
 void Handler::GetBoard(const drogon::HttpRequestPtr& req, std::function<void (const drogon::HttpResponsePtr&)> &&callback) {
-    try {
-        Json::Value boardJson;
-        Json::Value peacesJson;
-        boardJson["move_num"] = board_.GetMoveNum();
+    Json::Value boardJson;
+    Json::Value piecesJson;
+    boardJson["move_num"] = board_.GetMoveNum();
 
-        for (int i = 0; i < 8; ++i) {
-            for (int j = 0; j < 8; ++j) {
-                if (board_[Coordinate(i, j)] != nullptr) {
-                    Json::Value peaceJson; 
-                    peaceJson["name"] = board_[Coordinate(i, j)]->GetName();
-                    peaceJson["x"] = i;
-                    peaceJson["y"] = j;
-                    peacesJson.append(peaceJson);
-                }
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            if (board_[Coordinate(i, j)] != nullptr) {
+                Json::Value pieceJson; 
+                pieceJson["name"] = board_[Coordinate(i, j)]->GetName();
+                pieceJson["x"] = i;
+                pieceJson["y"] = j;
+                piecesJson.append(peaceJson);
             }
         }
-
-        boardJson["peaces"] = peacesJson;
-        auto resp = drogon::HttpResponse::newHttpJsonResponse(boardJson);
-        callback(resp);
-    } catch (const std::runtime_error& ex) {
-        auto resp = drogon::HttpResponse::newHttpResponse();
-        resp->setStatusCode(drogon::HttpStatusCode::k400BadRequest);
-        callback(resp);
     }
+
+    boardJson["pieces"] = piecesJson;
+    auto resp = drogon::HttpResponse::newHttpJsonResponse(boardJson);
+    callback(resp);
 }
