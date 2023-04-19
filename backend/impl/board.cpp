@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <exception>
+#include <stdexcept>
 
 namespace {
 
@@ -142,6 +143,9 @@ bool Board::CheckForCheckEnPassant(const Move& move) const {
 }
 
 std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
+    if ((*this)[crd] == nullptr) {
+        throw std::runtime_error("Where is no piece");
+    }
     MoveDirs dirs = (*this)[crd]->Dirs();
     int8_t color = (*this)[crd]->GetColor();
     std::vector<Coordinate> validMoves;

@@ -18,3 +18,5 @@ target_include_directories(frontend
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/impl
 )
+
+target_link_libraries(frontend PRIVATE backend Qt6::Core Qt6::Gui Qt6::SvgWidgets Qt6::Widgets)

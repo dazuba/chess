@@ -5,4 +5,4 @@ target_sources(chess
         main.cpp
 )
 
-target_link_libraries(chess PRIVATE backend frontend)
+target_link_libraries(chess PRIVATE backend frontend server Drogon::Drogon)

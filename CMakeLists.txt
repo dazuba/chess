@@ -10,6 +10,6 @@ set(CMAKE_AUTOMOC ON)
 add_subdirectory(bin)
 add_subdirectory(backend)
 add_subdirectory(frontend)
+add_subdirectory(server)
 
 FILE(COPY media DESTINATION "${CMAKE_BINARY_DIR}")
-target_link_libraries(frontend backend Qt6::Core Qt6::Gui Qt6::SvgWidgets Qt6::Widgets Drogon::Drogon)
