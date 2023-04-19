@@ -1,6 +1,8 @@
 #include "handler.h"
 
-void Handler::GetValidMoves(const drogon::HttpRequestPtr& req, std::function<void (const drogon::HttpResponsePtr&)> &&callback, int x, int y) {
+#include <iostream>
+
+void Handler::GetValidMoves(const drogon::HttpRequestPtr& req, std::function<void (const drogon::HttpResponsePtr&)> &&callback, int x, int y) const {
     try {
         auto moves = board_.ValidMoves(Coordinate(x, y));
         Json::Value movesJson;
@@ -12,14 +14,14 @@ void Handler::GetValidMoves(const drogon::HttpRequestPtr& req, std::function<voi
         }
         auto resp = drogon::HttpResponse::newHttpJsonResponse(movesJson);
         callback(resp);
-    } catch (const std::runtime_error& ex) {
+    } catch (...) {
         auto resp = drogon::HttpResponse::newHttpResponse();
         resp->setStatusCode(drogon::HttpStatusCode::k400BadRequest);
         callback(resp);
     }
 }
 
-void Handler::GetBoard(const drogon::HttpRequestPtr& req, std::function<void (const drogon::HttpResponsePtr&)> &&callback) {
+void Handler::GetBoard(const drogon::HttpRequestPtr& req, std::function<void (const drogon::HttpResponsePtr&)> &&callback) const {
     Json::Value boardJson;
     Json::Value piecesJson;
     boardJson["move_num"] = board_.GetMoveNum();
@@ -31,12 +33,24 @@ void Handler::GetBoard(const drogon::HttpRequestPtr& req, std::function<void (co
                 pieceJson["name"] = board_[Coordinate(i, j)]->GetName();
                 pieceJson["x"] = i;
                 pieceJson["y"] = j;
-                piecesJson.append(peaceJson);
+                piecesJson.append(pieceJson);
             }
         }
     }
 
     boardJson["pieces"] = piecesJson;
     auto resp = drogon::HttpResponse::newHttpJsonResponse(boardJson);
+    callback(resp);
+}
+
+void Handler::MakeMove(const drogon::HttpRequestPtr& req, std::function<void (const drogon::HttpResponsePtr&)> &&callback, int fromX, int fromY, int toX, int toY) {
+    std::cout << "asd" << std::endl;
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    try {
+        board_.MakeMove(Move{Coordinate(fromX, fromY), Coordinate(toX, toY)});
+        resp->setStatusCode(drogon::HttpStatusCode::k200OK);
+    } catch (...) {
+        resp->setStatusCode(drogon::HttpStatusCode::k400BadRequest);
+    }
     callback(resp);
 }

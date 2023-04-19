@@ -73,8 +73,12 @@ bool Board::CanLongCastle(const Coordinate& crd) const {
 }
 
 bool Board::IsValidMove(const Move& move) const {
-    std::vector<Coordinate> validMoves = ValidMoves(move.from);
-    return std::find(validMoves.begin(), validMoves.end(), move.to) != validMoves.end();
+    try {
+        std::vector<Coordinate> validMoves = ValidMoves(move.from);
+        return std::find(validMoves.begin(), validMoves.end(), move.to) != validMoves.end();
+    } catch (...) {
+        return false;
+    }
 }
 
 void Board::MakeMoveUnlocked(const Move& move) {
