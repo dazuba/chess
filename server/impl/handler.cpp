@@ -44,7 +44,6 @@ void Handler::GetBoard(const drogon::HttpRequestPtr& req, std::function<void (co
 }
 
 void Handler::MakeMove(const drogon::HttpRequestPtr& req, std::function<void (const drogon::HttpResponsePtr&)> &&callback, int fromX, int fromY, int toX, int toY) {
-    std::cout << "asd" << std::endl;
     auto resp = drogon::HttpResponse::newHttpResponse();
     try {
         board_.MakeMove(Move{Coordinate(fromX, fromY), Coordinate(toX, toY)});
