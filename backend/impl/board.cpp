@@ -73,12 +73,8 @@ bool Board::CanLongCastle(const Coordinate& crd) const {
 }
 
 bool Board::IsValidMove(const Move& move) const {
-    try {
-        std::vector<Coordinate> validMoves = ValidMoves(move.from);
-        return std::find(validMoves.begin(), validMoves.end(), move.to) != validMoves.end();
-    } catch (...) {
-        return false;
-    }
+    std::vector<Coordinate> validMoves = ValidMoves(move.from);
+    return std::find(validMoves.begin(), validMoves.end(), move.to) != validMoves.end();
 }
 
 void Board::MakeMoveUnlocked(const Move& move) {
@@ -147,7 +143,7 @@ bool Board::CheckForCheckEnPassant(const Move& move) const {
 }
 
 std::vector<Coordinate> Board::ValidMoves(const Coordinate& crd) const {
-    if ((*this)[crd] == nullptr) {
+    if ((*this)[crd] == nullptr || (*this)[crd]->GetColor() != GetStepColor()) {
         throw std::runtime_error("Where is no piece");
     }
     MoveDirs dirs = (*this)[crd]->Dirs();
